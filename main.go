@@ -1,19 +1,25 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/gorilla/mux"
+	"github.com/sohhamm/todo-go-server/handlers"
 )
 
-func helloHandler(w http.ResponseWriter, r *http.Request) {
-	//handler
-	fmt.Fprintf(w, "Hello this is a basic server")
+func initRouter() *mux.Router {
+	r := mux.NewRouter()
+	s := r.PathPrefix("/api").Subrouter()
+	// add all routes
+	s.HandleFunc("/todos", handlers.GetAllTodosHandler).Methods("GET")
+	s.HandleFunc("/todo/{id}", handlers.GetTodoByIDHandler).Methods("GET")
+	s.HandleFunc("/todos", handlers.AddTodoHandler).Methods("POST")
+	s.HandleFunc("/todo/{id}", handlers.UpdateTodoHandler).Methods("PUT")
+	s.HandleFunc("/todo/{id}", handlers.DeleteTodoHandler).Methods("DELETE")
+	return r
 }
 
 func main() {
-	r := mux.NewRouter()
-	r.HandleFunc("/", helloHandler).Methods("GET")
+	r := initRouter()
 	http.ListenAndServe(":8080", r)
 }
