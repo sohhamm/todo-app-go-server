@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 
 	m "github.com/sohhamm/todo-app-go-server/models"
@@ -13,15 +12,13 @@ import (
 
 func GetAllTodos(db *gorm.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var todo m.Todo
-		json.NewDecoder(r.Body).Decode(&todo)
-		fmt.Println(todo)
-		createdTodo := db.Create(&todo)
-		err := createdTodo.Error
+		var todos []m.Todo
+		dbTodos := db.Find(&todos)
+		err := dbTodos.Error
 		if err != nil {
-			panic("failed to add todo")
+			panic("failed to get  all todos")
 		}
-		json.NewEncoder(w).Encode(&todo)
+		json.NewEncoder(w).Encode(&todos)
 	}
 
 }
