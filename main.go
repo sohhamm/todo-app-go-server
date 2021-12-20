@@ -12,18 +12,19 @@ import (
 	"gorm.io/gorm"
 )
 
-var db *gorm.DB
-var err error
+var (
+	db  *gorm.DB
+	err error
+)
 
 func initRouter() *mux.Router {
 	r := mux.NewRouter()
 	s := r.PathPrefix("/api").Subrouter()
-	// add all routes
-	s.HandleFunc("/todos", c.GetAllTodos).Methods("GET")
-	s.HandleFunc("/todo/{id}", c.GetTodoByID).Methods("GET")
-	s.HandleFunc("/todos", c.AddTodo).Methods("POST")
-	s.HandleFunc("/todo/{id}", c.UpdateTodo).Methods("PUT")
-	s.HandleFunc("/todo/{id}", c.DeleteTodo).Methods("DELETE")
+	s.HandleFunc("/todos", c.GetAllTodos(db)).Methods("GET")
+	s.HandleFunc("/todo/{id}", c.GetTodoByID(db)).Methods("GET")
+	s.HandleFunc("/todos", c.AddTodo(db)).Methods("POST")
+	s.HandleFunc("/todo/{id}", c.UpdateTodo(db)).Methods("PUT")
+	s.HandleFunc("/todo/{id}", c.DeleteTodo(db)).Methods("DELETE")
 	return r
 }
 
@@ -35,7 +36,7 @@ func connectDatabase() {
 	password := os.Getenv("PASSWORD")
 
 	dsn := fmt.Sprintf("host=%s sslmode=disable port=%s user=%s dbname=%s password=%s TimeZone=Asia/Kolkata", host, port, user, dbName, password)
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
 
 	if err != nil {
 		panic(err)

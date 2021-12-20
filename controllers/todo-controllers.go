@@ -1,23 +1,40 @@
 package controllers
 
-import "net/http"
+import (
+	"fmt"
+	"net/http"
 
-func GetAllTodos(w http.ResponseWriter, r *http.Request) {
+	"gorm.io/gorm"
+)
 
-}
+func GetAllTodos(db *gorm.DB) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
 
-func GetTodoByID(w http.ResponseWriter, r *http.Request) {
-
-}
-
-func AddTodo(w http.ResponseWriter, r *http.Request) {
-
-}
-
-func UpdateTodo(w http.ResponseWriter, r *http.Request) {
+		fmt.Println(db)
+	}
 
 }
 
-func DeleteTodo(w http.ResponseWriter, r *http.Request) {
+func GetTodoByID(db *gorm.DB) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
 
+	}
+}
+
+func AddTodo(db *gorm.DB) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+
+	}
+}
+
+func UpdateTodo(db *gorm.DB) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+
+	}
+}
+
+func DeleteTodo(db *gorm.DB) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+
+	}
 }
