@@ -7,7 +7,7 @@ import (
 
 	"github.com/gorilla/mux"
 	c "github.com/sohhamm/todo-app-go-server/controllers"
-	"github.com/sohhamm/todo-app-go-server/models"
+	m "github.com/sohhamm/todo-app-go-server/models"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -23,7 +23,7 @@ func initRouter() *mux.Router {
 	/*----------- API routes ------------*/
 	s.HandleFunc("/todos", c.GetAllTodos(db)).Methods("GET")
 	s.HandleFunc("/todo/{id}", c.GetTodoByID(db)).Methods("GET")
-	s.HandleFunc("/todos", c.AddTodo(db)).Methods("POST")
+	s.HandleFunc("/todo", c.AddTodo(db)).Methods("POST")
 	s.HandleFunc("/todo/{id}", c.UpdateTodo(db)).Methods("PUT")
 	s.HandleFunc("/todo/{id}", c.DeleteTodo(db)).Methods("DELETE")
 	return r
@@ -45,13 +45,13 @@ func connectDatabase() {
 
 	fmt.Println("Connected to", dbName, "database")
 
-	db.AutoMigrate(&models.TodoModel{})
+	db.AutoMigrate(&m.Todo{})
 
 }
 
 func main() {
-	r := initRouter()
 	connectDatabase()
+	r := initRouter()
 
-	http.ListenAndServe(":8080", r)
+	http.ListenAndServe(":9000", r)
 }

@@ -6,7 +6,7 @@ import (
 
 /*-------- API Models --------*/
 
-type TodoModel struct {
+type Todo struct {
 	gorm.Model
 	Name        string `json:"name"`
 	Description string `json:"desc"`
