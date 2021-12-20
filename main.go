@@ -6,7 +6,8 @@ import (
 	"os"
 
 	"github.com/gorilla/mux"
-	"github.com/sohhamm/todo-app-go-server/handlers"
+	c "github.com/sohhamm/todo-app-go-server/controllers"
+	"github.com/sohhamm/todo-app-go-server/models"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -18,23 +19,20 @@ func initRouter() *mux.Router {
 	r := mux.NewRouter()
 	s := r.PathPrefix("/api").Subrouter()
 	// add all routes
-	s.HandleFunc("/todos", handlers.GetAllTodosHandler).Methods("GET")
-	s.HandleFunc("/todo/{id}", handlers.GetTodoByIDHandler).Methods("GET")
-	s.HandleFunc("/todos", handlers.AddTodoHandler).Methods("POST")
-	s.HandleFunc("/todo/{id}", handlers.UpdateTodoHandler).Methods("PUT")
-	s.HandleFunc("/todo/{id}", handlers.DeleteTodoHandler).Methods("DELETE")
+	s.HandleFunc("/todos", c.GetAllTodos).Methods("GET")
+	s.HandleFunc("/todo/{id}", c.GetTodoByID).Methods("GET")
+	s.HandleFunc("/todos", c.AddTodo).Methods("POST")
+	s.HandleFunc("/todo/{id}", c.UpdateTodo).Methods("PUT")
+	s.HandleFunc("/todo/{id}", c.DeleteTodo).Methods("DELETE")
 	return r
 }
 
 func connectDatabase() {
-	// dialect := os.Getenv("DIALECT")
 	host := os.Getenv("HOST")
 	port := os.Getenv("PORT")
 	user := os.Getenv("USER")
 	dbName := os.Getenv("NAME")
 	password := os.Getenv("PASSWORD")
-
-	fmt.Println(host, port, user, dbName, password)
 
 	dsn := fmt.Sprintf("host=%s sslmode=disable port=%s user=%s dbname=%s password=%s TimeZone=Asia/Kolkata", host, port, user, dbName, password)
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
@@ -43,7 +41,9 @@ func connectDatabase() {
 		panic(err)
 	}
 
-	fmt.Println("Connected to the database successfully")
+	fmt.Println("Connected to", dbName, "database")
+
+	db.AutoMigrate(&models.TodoModel{})
 
 }
 
