@@ -1,7 +1,12 @@
 package models
 
+import (
+	"gorm.io/gorm"
+)
+
 type TodoModel struct {
-	ID          int    `json:"id" gorm"column:id;autoIncrement"`
+	gorm.Model
+	ID          int    `json:"id" gorm:"column:id;autoIncrement"`
 	Name        string `json:"name"`
 	Description string `json:"description"`
 }
