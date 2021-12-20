@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/gorilla/mux"
 	m "github.com/sohhamm/todo-app-go-server/models"
 	"gorm.io/gorm"
 )
@@ -25,6 +26,14 @@ func GetAllTodos(db *gorm.DB) http.HandlerFunc {
 
 func GetTodoByID(db *gorm.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		params := mux.Vars(r)
+		var todo m.Todo
+		dbTodo := db.First(&todo, params["id"])
+		err := dbTodo.Error
+		if err != nil {
+			panic(err)
+		}
+		json.NewEncoder(w).Encode(&todo)
 
 	}
 }
