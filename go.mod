@@ -1,4 +1,4 @@
-module github.com/sohhamm/todo-go-server
+module github.com/sohhamm/todo-app-go-server
 
 go 1.17
 
