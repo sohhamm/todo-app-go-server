@@ -55,19 +55,28 @@ func UpdateTodo(db *gorm.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		params := mux.Vars(r)
 		var todo m.Todo
-		json.NewDecoder(r.Body).Decode(&todo)
 
+		//check if ID exists
 		dbTodo := db.First(&todo, params["id"])
 		err := dbTodo.Error
 		if err != nil {
 			panic(err)
 		}
+		json.NewDecoder(r.Body).Decode(&todo)
+		db.Model(&todo).Updates(todo)
 		json.NewEncoder(w).Encode(&todo)
 	}
 }
 
 func DeleteTodo(db *gorm.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-
+		params := mux.Vars(r)
+		var todo m.Todo
+		dbTodo := db.Delete(&todo, params["id"])
+		err := dbTodo.Error
+		if err != nil {
+			panic(err)
+		}
+		json.NewEncoder(w).Encode(&todo)
 	}
 }
