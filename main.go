@@ -20,6 +20,7 @@ var (
 func initRouter() *mux.Router {
 	r := mux.NewRouter()
 	s := r.PathPrefix("/api").Subrouter()
+	/*----------- API routes ------------*/
 	s.HandleFunc("/todos", c.GetAllTodos(db)).Methods("GET")
 	s.HandleFunc("/todo/{id}", c.GetTodoByID(db)).Methods("GET")
 	s.HandleFunc("/todos", c.AddTodo(db)).Methods("POST")

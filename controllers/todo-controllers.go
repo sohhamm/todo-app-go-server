@@ -7,6 +7,8 @@ import (
 	"gorm.io/gorm"
 )
 
+/*-------- API Controllers --------*/
+
 func GetAllTodos(db *gorm.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 

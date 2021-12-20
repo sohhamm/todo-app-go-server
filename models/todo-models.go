@@ -4,9 +4,10 @@ import (
 	"gorm.io/gorm"
 )
 
+/*-------- API Models --------*/
+
 type TodoModel struct {
 	gorm.Model
-	ID          int    `json:"id" gorm:"column:id;autoIncrement"`
 	Name        string `json:"name"`
-	Description string `json:"description"`
+	Description string `json:"desc"`
 }
