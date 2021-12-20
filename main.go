@@ -5,9 +5,8 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/sohhamm/todo-app-go-server/handlers"
-
 	"github.com/gorilla/mux"
+	"github.com/sohhamm/todo-app-go-server/handlers"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -35,6 +34,8 @@ func connectDatabase() {
 	dbName := os.Getenv("NAME")
 	password := os.Getenv("PASSWORD")
 
+	fmt.Println(host, port, user, dbName, password)
+
 	dsn := fmt.Sprintf("host=%s sslmode=disable port=%s user=%s dbname=%s password=%s TimeZone=Asia/Kolkata", host, port, user, dbName, password)
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 
@@ -42,14 +43,13 @@ func connectDatabase() {
 		panic(err)
 	}
 
-	fmt.Println(db)
-
 	fmt.Println("Connected to the database successfully")
 
 }
 
 func main() {
 	r := initRouter()
+	connectDatabase()
 
 	http.ListenAndServe(":8080", r)
 }
